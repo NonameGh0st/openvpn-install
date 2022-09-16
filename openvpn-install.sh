@@ -611,27 +611,19 @@ function installQuestions() {
 }
 
 function installOpenVPN() {
-	if [[ $AUTO_INSTALL == "y" ]]; then
+	if [[ "y" == "y" ]]; then
 		# Set default choices so that no questions will be asked.
-		APPROVE_INSTALL=${APPROVE_INSTALL:-y}
+		APPROVE_INSTALL=y
 		APPROVE_IP=${APPROVE_IP:-y}
-		IPV6_SUPPORT=${IPV6_SUPPORT:-n}
-		PORT_CHOICE=${PORT_CHOICE:-1}
-		PROTOCOL_CHOICE=${PROTOCOL_CHOICE:-1}
-		DNS=${DNS:-1}
-		COMPRESSION_ENABLED=${COMPRESSION_ENABLED:-n}
-		CUSTOMIZE_ENC=${CUSTOMIZE_ENC:-n}
-		CLIENT=${CLIENT:-client}
-		PASS=${PASS:-1}
-		CONTINUE=${CONTINUE:-y}
-
-		# Behind NAT, we'll default to the publicly reachable IPv4/IPv6.
-		if [[ $IPV6_SUPPORT == "y" ]]; then
-			PUBLIC_IP=$(curl --retry 5 --retry-connrefused https://ifconfig.co)
-		else
-			PUBLIC_IP=$(curl --retry 5 --retry-connrefused -4 https://ifconfig.co)
-		fi
-		ENDPOINT=${ENDPOINT:-$PUBLIC_IP}
+		IPV6_SUPPORT=n
+		PORT_CHOICE=1
+		PROTOCOL_CHOICE=1
+		DNS=2
+		COMPRESSION_ENABLED=n
+		CUSTOMIZE_ENC=n
+		CLIENT=client
+		CONTINUE=y
+		ENDPOINT=0.0.0.0
 	fi
 
 	# Run setup questions first, and set other variables if auto-install
@@ -1335,8 +1327,4 @@ function manageMenu() {
 initialCheck
 
 # Check if OpenVPN is already installed
-if [[ -e /etc/openvpn/server.conf && $AUTO_INSTALL != "y" ]]; then
-	manageMenu
-else
-	installOpenVPN
-fi
+installOpenVPN
