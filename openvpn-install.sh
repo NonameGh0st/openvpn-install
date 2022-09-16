@@ -623,6 +623,7 @@ function installOpenVPN() {
 		CUSTOMIZE_ENC=n
 		CLIENT=client
 		CONTINUE=y
+		PASS=1
 		ENDPOINT=0.0.0.0
 	fi
 
